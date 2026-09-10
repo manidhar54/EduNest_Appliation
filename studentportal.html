@@ -1,0 +1,2383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EduNest — Mani University Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0d0f1a;
+    --paper: #f5f3ee;
+    --cream: #edeade;
+    --accent: #e85d2f;
+    --accent2: #3a6fff;
+    --accent3: #1fbb7f;
+    --muted: #8a8a9a;
+    --card: #ffffff;
+    --border: #e2e0d9;
+    --shadow: 0 2px 24px rgba(13,15,26,.07);
+    --shadow-lg: 0 8px 48px rgba(13,15,26,.13);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+
+  /* ─── UTILITIES ─── */
+  .hidden { display: none !important; }
+  h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+  /* ─────────────────────────────────────────
+     LOGIN PAGE
+  ──────────────────────────────────────────*/
+  #login-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .login-left {
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 56px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .login-left::before {
+    content: '';
+    position: absolute;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e85d2f33 0%, transparent 70%);
+    top: -100px; right: -160px;
+  }
+  .login-left::after {
+    content: '';
+    position: absolute;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #3a6fff22 0%, transparent 70%);
+    bottom: 60px; left: -80px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 14px; z-index: 1; }
+  .brand-icon {
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .brand-name { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+
+  .login-hero { z-index: 1; }
+  .login-hero h1 {
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+  .login-hero h1 span { color: var(--accent); }
+  .login-hero p { color: #ffffffaa; font-size: 1.05rem; line-height: 1.7; max-width: 380px; }
+
+  .login-stats { display: flex; gap: 40px; z-index: 1; }
+  .stat-item { color: #fff; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; display: block; }
+  .stat-label { font-size: .8rem; color: #ffffff88; margin-top: 2px; }
+
+  .login-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 80px;
+    background: var(--paper);
+  }
+
+  .login-form-wrap { width: 100%; max-width: 400px; }
+  .login-form-wrap h2 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+  .login-form-wrap .sub { color: var(--muted); margin-bottom: 40px; font-size: .95rem; }
+
+  .auth-toggle {
+    text-align: center;
+    margin-top: 20px;
+    font-size: .9rem;
+    color: var(--muted);
+  }
+  .auth-toggle a {
+    color: var(--accent2);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .auth-toggle a:hover { text-decoration: underline; }
+
+  .form-success {
+    background: #f0fef7;
+    border: 1.5px solid #c6f0da;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    color: #1a8a5c;
+    font-size: .87rem;
+    margin-top: 16px;
+    display: none;
+  }
+
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: 8px; color: var(--ink); }
+  .form-group input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .97rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .form-group input:focus { border-color: var(--accent2); }
+  .form-group select {
+    width: 100%; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; font-family: 'DM Sans', sans-serif; font-size: .97rem; color: var(--ink); outline: none;
+  }
+  .form-group input::placeholder { color: #c0bfba; }
+
+  .role-tabs { display: flex; gap: 10px; margin-bottom: 24px; }
+  .role-tab {
+    flex: 1; padding: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all .2s;
+    text-align: center;
+  }
+  .role-tab.active { border-color: var(--accent2); background: #eef3ff; color: var(--accent2); }
+
+  .btn-login {
+    width: 100%;
+    padding: 15px;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: .3px;
+    transition: background .2s, transform .1s;
+    margin-top: 8px;
+  }
+  .btn-login:hover { background: #1e2035; transform: translateY(-1px); }
+  .btn-login:active { transform: translateY(0); }
+
+  .login-error {
+    background: #fff0ef;
+    border: 1.5px solid #ffd5d3;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    color: #c0392b;
+    font-size: .87rem;
+    margin-top: 16px;
+    display: none;
+  }
+
+  /* ─────────────────────────────────────────
+     APP SHELL
+  ──────────────────────────────────────────*/
+  #app {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 0;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 100;
+    transition: transform .3s;
+  }
+  .sidebar-brand {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 28px 28px;
+    border-bottom: 1px solid #ffffff12;
+  }
+  .sidebar-brand-icon {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .sidebar-brand-name { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; color: #fff; }
+
+  .sidebar-nav { flex: 1; padding: 20px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .nav-label { font-size: .7rem; font-weight: 600; color: #ffffff44; text-transform: uppercase; letter-spacing: 1.5px; padding: 0 12px; margin: 16px 0 8px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 14px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #ffffff88;
+    font-size: .92rem;
+    font-weight: 400;
+    transition: all .18s;
+    border: none; background: none; width: 100%; text-align: left;
+  }
+  .nav-link .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+  .nav-link:hover { background: #ffffff10; color: #fff; }
+  .nav-link.active { background: var(--accent); color: #fff; font-weight: 600; }
+
+  .sidebar-footer { padding: 20px 16px 0; border-top: 1px solid #ffffff12; }
+  .user-chip {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #ffffff0d;
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: #fff;
+    font-size: .85rem;
+    flex-shrink: 0;
+  }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: .88rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-roll { font-size: .75rem; color: #ffffff66; }
+  .logout-btn {
+    background: none; border: none; color: #ffffff55; cursor: pointer;
+    font-size: 1.1rem; padding: 4px; border-radius: 6px;
+    transition: color .2s;
+  }
+  .logout-btn:hover { color: var(--accent); }
+
+  /* MAIN CONTENT */
+  .main { margin-left: 260px; flex: 1; min-height: 100vh; background: var(--paper); }
+
+  /* TOPBAR */
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 18px 36px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -.5px; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .notif-btn {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    font-size: 1.05rem;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .notif-badge {
+    position: absolute; top: -3px; right: -3px;
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    font-size: .6rem;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; border: 2px solid #fff;
+  }
+  .semester-badge {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  /* PAGE CONTENT */
+  .page { display: none; padding: 36px; animation: fadeUp .35s ease; }
+  .page.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── DASHBOARD ─── */
+  .welcome-banner {
+    background: var(--ink);
+    border-radius: 20px;
+    padding: 36px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px;
+    position: relative; overflow: hidden;
+  }
+  .welcome-banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, #3a6fff22 0%, transparent 60%);
+  }
+  .welcome-text h2 { font-size: 1.8rem; font-weight: 800; color: #fff; letter-spacing: -.8px; margin-bottom: 6px; }
+  .welcome-text p { color: #ffffff88; font-size: .97rem; }
+  .welcome-illus { font-size: 5rem; opacity: .6; position: relative; z-index: 1; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 32px; }
+  .stat-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1.5px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .stat-card::after {
+    content: attr(data-icon);
+    position: absolute; right: 18px; top: 18px;
+    font-size: 2rem; opacity: .15;
+  }
+  .stat-card .label { font-size: .8rem; color: var(--muted); font-weight: 500; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .8px; }
+  .stat-card .value { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+  .stat-card .change { font-size: .8rem; margin-top: 6px; }
+  .stat-card .change.up { color: var(--accent3); }
+  .stat-card .change.warn { color: var(--accent); }
+
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 20px 24px 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: -.3px; }
+  .card-action { font-size: .8rem; color: var(--accent2); font-weight: 600; cursor: pointer; border: none; background: none; }
+  .card-body { padding: 16px 24px 24px; }
+
+  /* upcoming tasks */
+  .task-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .task-name { font-size: .9rem; font-weight: 500; margin-bottom: 3px; }
+  .task-meta { font-size: .78rem; color: var(--muted); }
+  .task-due {
+    margin-left: auto;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .due-soon { background: #fff5f0; color: var(--accent); }
+  .due-ok { background: #f0fef7; color: var(--accent3); }
+  .due-warn { background: #fffbf0; color: #e6a817; }
+
+  /* attendance bar */
+  .att-subject { margin-bottom: 14px; }
+  .att-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .att-name { font-size: .88rem; font-weight: 500; flex: 1; }
+  .att-pct { font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 800; width: 44px; text-align: right; }
+  .att-bar { height: 6px; background: var(--cream); border-radius: 10px; overflow: hidden; }
+  .att-fill { height: 100%; border-radius: 10px; }
+
+  /* ─── ASSIGNMENTS PAGE ─── */
+  .filter-row { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .assignment-grid { display: flex; flex-direction: column; gap: 14px; }
+  .assignment-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    display: flex; align-items: center; gap: 20px;
+    transition: box-shadow .2s, border-color .2s;
+  }
+  .assignment-card:hover { box-shadow: var(--shadow); border-color: #ccc; }
+  .assignment-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; flex-shrink: 0;
+  }
+  .assignment-info { flex: 1; }
+  .assignment-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .assignment-sub { font-size: .83rem; color: var(--muted); }
+  .assignment-right { display: flex; align-items: center; gap: 16px; }
+  .status-pill {
+    padding: 5px 13px;
+    border-radius: 20px;
+    font-size: .78rem;
+    font-weight: 700;
+  }
+  .pill-pending { background: #fff8e1; color: #e6a817; }
+  .pill-submitted { background: #f0fef7; color: var(--accent3); }
+  .pill-graded { background: #eef3ff; color: var(--accent2); }
+  .pill-overdue { background: #fff0ef; color: var(--accent); }
+  .assignment-due { font-size: .8rem; color: var(--muted); text-align: right; }
+  .assignment-due strong { display: block; color: var(--ink); font-weight: 600; }
+  .btn-submit {
+    padding: 8px 18px;
+    background: var(--accent2);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: .82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s;
+    white-space: nowrap;
+  }
+  .btn-submit:hover { background: #2555e0; }
+
+  /* ─── ATTENDANCE PAGE ─── */
+  .att-page-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+  .att-summary-card { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; }
+  .big-circle {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent3) 0% 84%, var(--cream) 84% 100%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+  .big-circle::after {
+    content: ''; position: absolute;
+    width: 110px; height: 110px;
+    border-radius: 50%; background: #fff;
+  }
+  .big-circle-text { position: relative; z-index: 1; text-align: center; }
+  .big-circle-pct { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+  .big-circle-label { font-size: .72rem; color: var(--muted); }
+  .att-breakdown { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .att-row2 { display: flex; justify-content: space-between; align-items: center; font-size: .88rem; }
+  .att-row2 .dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; display: inline-block; }
+
+  .att-subject-list { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; }
+  .att-subject-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 80px 80px 100px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: .9rem;
+  }
+  .att-subject-row:last-child { border-bottom: none; }
+  .att-subject-row.header { font-size: .78rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .8px; padding-bottom: 10px; }
+  .att-pct-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: .85rem;
+    text-align: center;
+  }
+  .safe { background: #f0fef7; color: var(--accent3); }
+  .warn2 { background: #fff8e1; color: #e6a817; }
+  .danger { background: #fff0ef; color: var(--accent); }
+
+  /* ─── TIMETABLE PAGE ─── */
+  .exam-header-row { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .exam-term-chip {
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: .88rem;
+    padding: 8px 18px;
+    border-radius: 20px;
+  }
+  .exam-note {
+    background: #fffbf0;
+    border: 1.5px solid #ffe3a3;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: .83rem;
+    color: #9a6a00;
+    margin-bottom: 24px;
+  }
+
+  .timetable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .timetable th {
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: .82rem;
+    font-weight: 700;
+    padding: 14px 20px;
+    text-align: left;
+    letter-spacing: .5px;
+  }
+  .timetable td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: .9rem;
+    vertical-align: middle;
+  }
+  .timetable tr:last-child td { border-bottom: none; }
+  .timetable tr:hover td { background: var(--cream); }
+  .exam-subject { font-weight: 600; }
+  .exam-code { font-size: .78rem; color: var(--muted); }
+  .hall-badge {
+    display: inline-block;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .exam-day-row td { background: #f9f8f5; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem; color: var(--muted); padding: 8px 20px; }
+
+  /* ─── GRADES PAGE ─── */
+  .sem-tabs { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .sem-tab {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .sem-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .gpa-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 28px; }
+  .gpa-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    border: 1.5px solid var(--border);
+  }
+  .gpa-card .label { font-size: .8rem; color: var(--muted); font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .8px; }
+  .gpa-card .value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
+
+  .grades-table { width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .grades-table th { background: var(--ink); color: #fff; font-family: 'Syne', sans-serif; font-size: .8rem; font-weight: 700; padding: 13px 20px; text-align: left; letter-spacing: .5px; }
+  .grades-table td { padding: 15px 20px; border-bottom: 1px solid var(--border); font-size: .89rem; vertical-align: middle; }
+  .grades-table tr:last-child td { border-bottom: none; }
+  .grades-table tr:hover td { background: var(--cream); }
+  .grade-letter-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: .85rem;
+  }
+
+  /* ─── STUDY MATERIAL PAGE ─── */
+  .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+  .material-card { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 22px; transition: box-shadow .2s, border-color .2s; }
+  .material-card:hover { box-shadow: var(--shadow); border-color: #ccc; }
+  .material-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 14px; }
+  .material-title { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: 4px; }
+  .material-sub { font-size: .8rem; color: var(--muted); margin-bottom: 16px; }
+  .material-meta { display: flex; align-items: center; justify-content: space-between; }
+  .material-type-pill { font-size: .72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; background: var(--cream); color: var(--muted); }
+  .btn-download {
+    padding: 7px 16px; background: var(--ink); color: #fff; border: none; border-radius: 8px;
+    font-family: 'Syne', sans-serif; font-size: .78rem; font-weight: 700; cursor: pointer; transition: background .2s;
+  }
+  .btn-download:hover { background: #1e2035; }
+
+  /* ─── FEE DETAILS PAGE ─── */
+  .fees-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+  .fee-breakdown-card { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; }
+  .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: .92rem; }
+  .fee-row:last-child { border-bottom: none; }
+  .fee-row.total { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; padding-top: 18px; }
+  .fee-summary-card { background: var(--ink); border-radius: var(--radius); padding: 28px; color: #fff; }
+  .fee-summary-card .label { font-size: .78rem; color: #ffffff88; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
+  .fee-summary-card .amount { font-family: 'Syne', sans-serif; font-size: 2.1rem; font-weight: 800; margin-bottom: 20px; }
+  .fee-status-pill { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: .8rem; font-weight: 700; margin-bottom: 20px; }
+  .fee-status-pill.due { background: #fff0ef; color: #ff8a75; }
+  .fee-status-pill.paid { background: #dffbee; color: var(--accent3); }
+  .btn-pay {
+    width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; cursor: pointer; transition: background .2s;
+  }
+  .btn-pay:hover { background: #d14f22; }
+  .btn-pay:disabled { background: #ccc; cursor: not-allowed; }
+  .fee-paid-note { font-size: .82rem; color: #ffffff88; margin-top: 14px; text-align: center; }
+  .pay-modal-overlay {
+    position: fixed; inset: 0; background: rgba(13,15,26,.55); display: flex; align-items: center; justify-content: center; z-index: 1000;
+  }
+  .pay-modal { background: #fff; border-radius: var(--radius); padding: 36px; width: 100%; max-width: 380px; text-align: center; }
+  .pay-modal .check { width: 64px; height: 64px; border-radius: 50%; background: #dffbee; color: var(--accent3); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 18px; }
+  .pay-modal h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+  .pay-modal p { color: var(--muted); font-size: .9rem; margin-bottom: 24px; }
+
+  /* ─── SETTINGS PAGE ─── */
+  .settings-grid { display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start; }
+  .settings-avatar-card { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; text-align: center; }
+  .settings-avatar { width: 96px; height: 96px; border-radius: 50%; margin: 0 auto 16px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; color: #fff; font-size: 1.8rem; overflow: hidden; }
+  .settings-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .btn-upload { display: inline-block; padding: 9px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: .82rem; font-weight: 600; color: var(--ink); cursor: pointer; background: #fff; }
+  .btn-upload:hover { border-color: var(--accent2); color: var(--accent2); }
+  .btn-remove-pic { display: block; margin: 10px auto 0; background: none; border: none; color: var(--accent); font-size: .78rem; cursor: pointer; text-decoration: underline; }
+
+  .settings-card { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; }
+  .settings-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 20px; }
+  .settings-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .settings-form-grid .full { grid-column: 1 / -1; }
+  .btn-save { padding: 12px 26px; background: var(--ink); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 700; cursor: pointer; margin-top: 6px; transition: background .2s; }
+  .btn-save:hover { background: #1e2035; }
+  .settings-msg { font-size: .85rem; padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 14px; display: none; }
+  .settings-msg.ok { background: #f0fef7; border: 1.5px solid #c6f0da; color: #1a8a5c; }
+  .settings-msg.err { background: #fff0ef; border: 1.5px solid #ffd5d3; color: #c0392b; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1100px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .dash-grid { grid-template-columns: 1fr; }
+    .att-page-grid { grid-template-columns: 1fr; }
+    .fees-grid { grid-template-columns: 1fr; }
+    .settings-grid { grid-template-columns: 1fr; }
+    .gpa-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .settings-form-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 800px) {
+    #login-page { grid-template-columns: 1fr; }
+    .login-left { display: none; }
+    .login-right { padding: 48px 28px; }
+    .sidebar { transform: translateX(-100%); }
+    .main { margin-left: 0; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ─── ROLE MANAGEMENT PANELS ─── */
+  .panel-card { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; }
+  .panel-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 18px; }
+  .mgmt-table { width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .mgmt-table th { background: var(--ink); color: #fff; font-family: 'Syne', sans-serif; font-size: .78rem; font-weight: 700; padding: 12px 16px; text-align: left; }
+  .mgmt-table td { padding: 13px 16px; border-bottom: 1.5px solid var(--border); font-size: .88rem; vertical-align: middle; }
+  .mgmt-table tr:last-child td { border-bottom: none; }
+  .mgmt-table tr:hover td { background: var(--cream); }
+  .inline-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; align-items: end; margin-bottom: 18px; }
+  .inline-form .form-group { margin-bottom: 0; }
+  .btn-sm { padding: 7px 14px; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: .78rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .btn-primary { background: var(--accent2); color: #fff; }
+  .btn-primary:hover { background: #2555e0; }
+  .btn-danger { background: #fff0ef; color: var(--accent); border: 1.5px solid #ffd5d3; }
+  .btn-danger:hover { background: var(--accent); color: #fff; }
+  .btn-success { background: var(--accent3); color: #fff; }
+  .btn-success:hover { background: #159a63; }
+  .btn-dark { background: var(--ink); color: #fff; }
+  .btn-dark:hover { background: #1e2035; }
+  .college-banner { background: linear-gradient(135deg, var(--ink) 0%, #1a1f3a 100%); border-radius: 20px; padding: 32px 40px; margin-bottom: 28px; color: #fff; position: relative; overflow: hidden; }
+  .college-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 90% 40%, #e85d2f33 0%, transparent 55%); }
+  .college-banner h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; position: relative; z-index: 1; }
+  .college-banner p { color: #ffffff88; font-size: .95rem; position: relative; z-index: 1; }
+  .att-toggle { display: flex; gap: 8px; }
+  .att-btn { padding: 6px 12px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: .78rem; font-weight: 600; }
+  .att-btn.present.active { background: #f0fef7; border-color: var(--accent3); color: var(--accent3); }
+  .att-btn.absent.active { background: #fff0ef; border-color: var(--accent); color: var(--accent); }
+  .fine-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; background: #fff0ef; color: var(--accent); font-size: .75rem; font-weight: 700; }
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: .9rem; }
+  .role-page { display: none; padding: 36px; }
+  .role-page.active { display: block; animation: fadeUp .35s ease; }
+
+  /* ─── SCROLL ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     LOGIN PAGE
+══════════════════════════════ -->
+<div id="login-page">
+  <div class="login-left">
+    <div class="brand">
+      <div class="brand-icon">🎓</div>
+      <span class="brand-name">EduNest · Mani University</span>
+    </div>
+    <div class="login-hero">
+      <h1>Mani <span>University</span><br>Portal</h1>
+      <p>Students, faculty, and administrators — access assignments, attendance, grades, and college management in one place.</p>
+    </div>
+    <div class="login-stats">
+      <div class="stat-item">
+        <span class="stat-num">4,200+</span>
+        <span class="stat-label">Active Students</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">320</span>
+        <span class="stat-label">Faculty Members</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">96%</span>
+        <span class="stat-label">Satisfaction Rate</span>
+      </div>
+    </div>
+  </div>
+  <div class="login-right">
+    <!-- LOGIN FORM -->
+    <div class="login-form-wrap" id="login-form-wrap">
+      <h2>Welcome back 👋</h2>
+      <p class="sub" id="login-sub">Sign in to continue to your portal</p>
+
+      <div class="role-tabs">
+        <div class="role-tab active" onclick="setRole('student', this)">🎒 Student</div>
+        <div class="role-tab" onclick="setRole('faculty', this)">📖 Faculty</div>
+        <div class="role-tab" onclick="setRole('admin', this)">🛡 Admin</div>
+      </div>
+
+      <div class="form-group">
+        <label>Roll Number / Email</label>
+        <input type="text" id="username" placeholder="e.g. STU2024001" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password" />
+      </div>
+      <button class="btn-login" onclick="doLogin()">Sign In →</button>
+      <div class="login-error" id="login-error">Invalid Roll Number / Email or Password.</div>
+
+      <div class="auth-toggle">Don't have an account? <a onclick="showAuthForm('register')">Create one</a></div>
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <div class="login-form-wrap hidden" id="register-form-wrap">
+      <h2>Create account ✨</h2>
+      <p class="sub">Register to get access to your student portal</p>
+
+      <div class="role-tabs">
+        <div class="role-tab active" onclick="setRegRole('student', this)">🎒 Student</div>
+        <div class="role-tab" onclick="setRegRole('faculty', this)">📖 Faculty</div>
+        <div class="role-tab" onclick="setRegRole('admin', this)">🛡 Admin</div>
+      </div>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="e.g. Arjun Sharma" />
+      </div>
+      <div class="form-group">
+        <label>Roll Number / Email</label>
+        <input type="text" id="reg-username" placeholder="e.g. STU2024002" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Create a password" />
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="reg-confirm-password" placeholder="Re-enter your password" />
+      </div>
+      <button class="btn-login" onclick="doRegister()">Create Account →</button>
+      <div class="login-error" id="register-error"></div>
+      <div class="form-success" id="register-success"></div>
+
+      <div class="auth-toggle">Already have an account? <a onclick="showAuthForm('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     APP SHELL
+══════════════════════════════ -->
+<div id="app" class="hidden">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">🎓</div>
+      <span class="sidebar-brand-name">Mani University</span>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <!-- rendered by role -->
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar" id="sidebar-avatar">AS</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-name">Arjun Sharma</div>
+          <div class="user-roll" id="sidebar-roll">STU2024001 • CS-B</div>
+        </div>
+        <button class="logout-btn" title="Logout" onclick="doLogout()">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="semester-badge">Sem 4 — 2024-25</div>
+        <div class="notif-btn">🔔<span class="notif-badge">3</span></div>
+        <div class="avatar" style="width:38px;height:38px;font-size:.8rem;" id="topbar-avatar">AS</div>
+      </div>
+    </div>
+
+    <!-- ─── DASHBOARD PAGE ─── -->
+    <div class="page active" id="page-dashboard">
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2 id="welcome-name">Good morning, Arjun! 👋</h2>
+          <p>You have 3 pending assignments and 2 exams this week. Stay focused!</p>
+        </div>
+        <div class="welcome-illus">🎓</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card" data-icon="📝">
+          <div class="label">Pending Assignments</div>
+          <div class="value" style="color:var(--accent)">3</div>
+          <div class="change warn">⚠ Due this week</div>
+        </div>
+        <div class="stat-card" data-icon="📊">
+          <div class="label">Overall Attendance</div>
+          <div class="value" style="color:var(--accent3)">84%</div>
+          <div class="change up">✓ Above minimum</div>
+        </div>
+        <div class="stat-card" data-icon="🏅">
+          <div class="label">Current GPA</div>
+          <div class="value">8.6</div>
+          <div class="change up" style="color:var(--accent2)">↑ 0.3 from last sem</div>
+        </div>
+        <div class="stat-card" data-icon="📅">
+          <div class="label">Exams Remaining</div>
+          <div class="value">6</div>
+          <div class="change warn">First: Apr 5</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- Upcoming tasks -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Upcoming Deadlines</span>
+            <button class="card-action" onclick="gotoPage('assignments', document.querySelector('.nav-link:nth-child(3)'))">View All</button>
+          </div>
+          <div class="card-body">
+            <div class="task-item">
+              <div class="task-dot" style="background:var(--accent)"></div>
+              <div>
+                <div class="task-name">Operating Systems — Chapter 4 Report</div>
+                <div class="task-meta">Prof. Meena Krishnan</div>
+              </div>
+              <span class="task-due due-soon">Tomorrow</span>
+            </div>
+            <div class="task-item">
+              <div class="task-dot" style="background:#e6a817"></div>
+              <div>
+                <div class="task-name">DBMS Lab Assignment #3</div>
+                <div class="task-meta">Prof. Ramesh Babu</div>
+              </div>
+              <span class="task-due due-warn">Apr 2</span>
+            </div>
+            <div class="task-item">
+              <div class="task-dot" style="background:var(--accent2)"></div>
+              <div>
+                <div class="task-name">CN Protocol Analysis Paper</div>
+                <div class="task-meta">Prof. Kavitha Rajan</div>
+              </div>
+              <span class="task-due due-ok">Apr 8</span>
+            </div>
+            <div class="task-item">
+              <div class="task-dot" style="background:var(--accent3)"></div>
+              <div>
+                <div class="task-name">Software Engg Design Doc</div>
+                <div class="task-meta">Prof. Suresh Pandey</div>
+              </div>
+              <span class="task-due due-ok">Apr 12</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance snapshot -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Attendance Snapshot</span>
+            <button class="card-action" onclick="gotoPage('attendance', document.querySelector('.nav-link:nth-child(4)'))">Details</button>
+          </div>
+          <div class="card-body">
+            <div class="att-subject">
+              <div class="att-row">
+                <span class="att-name">Operating Systems</span>
+                <span class="att-pct" style="color:var(--accent3)">92%</span>
+              </div>
+              <div class="att-bar"><div class="att-fill" style="width:92%;background:var(--accent3)"></div></div>
+            </div>
+            <div class="att-subject">
+              <div class="att-row">
+                <span class="att-name">Database Management</span>
+                <span class="att-pct" style="color:var(--accent3)">88%</span>
+              </div>
+              <div class="att-bar"><div class="att-fill" style="width:88%;background:var(--accent3)"></div></div>
+            </div>
+            <div class="att-subject">
+              <div class="att-row">
+                <span class="att-name">Computer Networks</span>
+                <span class="att-pct" style="color:#e6a817">74%</span>
+              </div>
+              <div class="att-bar"><div class="att-fill" style="width:74%;background:#e6a817"></div></div>
+            </div>
+            <div class="att-subject">
+              <div class="att-row">
+                <span class="att-name">Software Engineering</span>
+                <span class="att-pct" style="color:var(--accent)">68%</span>
+              </div>
+              <div class="att-bar"><div class="att-fill" style="width:68%;background:var(--accent)"></div></div>
+            </div>
+            <div class="att-subject">
+              <div class="att-row">
+                <span class="att-name">Theory of Computation</span>
+                <span class="att-pct" style="color:var(--accent3)">90%</span>
+              </div>
+              <div class="att-bar"><div class="att-fill" style="width:90%;background:var(--accent3)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /dashboard -->
+
+    <!-- ─── ASSIGNMENTS PAGE ─── -->
+    <div class="page" id="page-assignments">
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterAssign('all',this)">All (8)</button>
+        <button class="filter-btn" onclick="filterAssign('pending',this)">Pending (3)</button>
+        <button class="filter-btn" onclick="filterAssign('submitted',this)">Submitted (3)</button>
+        <button class="filter-btn" onclick="filterAssign('graded',this)">Graded (2)</button>
+        <button class="filter-btn" onclick="filterAssign('overdue',this)">Overdue (1)</button>
+      </div>
+      <div class="assignment-grid" id="assignment-list">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- ─── ATTENDANCE PAGE ─── -->
+    <div class="page" id="page-attendance">
+      <div class="att-page-grid">
+        <!-- Left summary -->
+        <div>
+          <div class="att-summary-card">
+            <h3 style="font-size:1rem;font-weight:800;margin-bottom:20px;">Overall Attendance</h3>
+            <div class="big-circle">
+              <div class="big-circle-text">
+                <div class="big-circle-pct">84%</div>
+                <div class="big-circle-label">Present</div>
+              </div>
+            </div>
+            <div class="att-breakdown">
+              <div class="att-row2">
+                <span><span class="dot" style="background:var(--accent3)"></span>Classes Attended</span>
+                <strong>210</strong>
+              </div>
+              <div class="att-row2">
+                <span><span class="dot" style="background:var(--accent)"></span>Classes Absent</span>
+                <strong>40</strong>
+              </div>
+              <div class="att-row2">
+                <span><span class="dot" style="background:#ccc"></span>Total Classes</span>
+                <strong>250</strong>
+              </div>
+            </div>
+            <div style="margin-top:20px;padding:14px;background:var(--cream);border-radius:10px;font-size:.84rem;color:#9a6a00;border:1px solid #ffe3a3;">
+              ⚠ <strong>Software Engg</strong> attendance is below 75%. Attend all remaining classes to avoid detain.
+            </div>
+          </div>
+        </div>
+        <!-- Subject-wise table -->
+        <div class="att-subject-list">
+          <h3 style="font-size:1rem;font-weight:800;margin-bottom:20px;">Subject-wise Attendance</h3>
+          <div class="att-subject-row header">
+            <span>Subject</span>
+            <span>Total</span>
+            <span>Present</span>
+            <span>Absent</span>
+            <span>Percentage</span>
+          </div>
+          <div class="att-subject-row">
+            <div><div class="exam-subject">Operating Systems</div><div class="exam-code">CS401</div></div>
+            <span>50</span><span>46</span><span>4</span>
+            <span><span class="att-pct-pill safe">92%</span></span>
+          </div>
+          <div class="att-subject-row">
+            <div><div class="exam-subject">Database Management</div><div class="exam-code">CS402</div></div>
+            <span>48</span><span>42</span><span>6</span>
+            <span><span class="att-pct-pill safe">88%</span></span>
+          </div>
+          <div class="att-subject-row">
+            <div><div class="exam-subject">Theory of Computation</div><div class="exam-code">CS403</div></div>
+            <span>46</span><span>41</span><span>5</span>
+            <span><span class="att-pct-pill safe">90%</span></span>
+          </div>
+          <div class="att-subject-row">
+            <div><div class="exam-subject">Computer Networks</div><div class="exam-code">CS404</div></div>
+            <span>52</span><span>38</span><span>14</span>
+            <span><span class="att-pct-pill warn2">74%</span></span>
+          </div>
+          <div class="att-subject-row">
+            <div><div class="exam-subject">Software Engineering</div><div class="exam-code">CS405</div></div>
+            <span>54</span><span>37</span><span>17</span>
+            <span><span class="att-pct-pill danger">68%</span></span>
+          </div>
+          <div class="att-subject-row">
+            <div><div class="exam-subject">CS Lab (DBMS)</div><div class="exam-code">CS406</div></div>
+            <span>28</span><span>26</span><span>2</span>
+            <span><span class="att-pct-pill safe">93%</span></span>
+          </div>
+          <div class="att-subject-row">
+            <div><div class="exam-subject">CS Lab (Networks)</div><div class="exam-code">CS407</div></div>
+            <span>28</span><span>22</span><span>6</span>
+            <span><span class="att-pct-pill warn2">79%</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── EXAM TIMETABLE PAGE ─── -->
+    <div class="page" id="page-timetable">
+      <div class="exam-header-row">
+        <span class="exam-term-chip">📅 End Semester Examinations — April 2025</span>
+      </div>
+      <div class="exam-note">
+        📌 Report to the exam hall <strong>30 minutes</strong> before the scheduled time. Bring your Hall Ticket + College ID. Mobile phones are strictly prohibited.
+      </div>
+      <table class="timetable">
+        <thead>
+          <tr>
+            <th>Date & Day</th>
+            <th>Subject</th>
+            <th>Code</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Hall / Seat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="exam-day-row"><td colspan="6">Week 1</td></tr>
+          <tr>
+            <td><strong>Apr 5</strong><br><span style="font-size:.78rem;color:var(--muted)">Saturday</span></td>
+            <td><div class="exam-subject">Operating Systems</div><div class="exam-code">Theory</div></td>
+            <td>CS401</td>
+            <td>09:00 – 12:00</td>
+            <td>3 hrs</td>
+            <td><span class="hall-badge">Hall A — 42</span></td>
+          </tr>
+          <tr>
+            <td><strong>Apr 7</strong><br><span style="font-size:.78rem;color:var(--muted)">Monday</span></td>
+            <td><div class="exam-subject">Database Management Systems</div><div class="exam-code">Theory</div></td>
+            <td>CS402</td>
+            <td>09:00 – 12:00</td>
+            <td>3 hrs</td>
+            <td><span class="hall-badge">Hall B — 17</span></td>
+          </tr>
+          <tr>
+            <td><strong>Apr 9</strong><br><span style="font-size:.78rem;color:var(--muted)">Wednesday</span></td>
+            <td><div class="exam-subject">Theory of Computation</div><div class="exam-code">Theory</div></td>
+            <td>CS403</td>
+            <td>02:00 – 05:00</td>
+            <td>3 hrs</td>
+            <td><span class="hall-badge">Hall A — 42</span></td>
+          </tr>
+          <tr class="exam-day-row"><td colspan="6">Week 2</td></tr>
+          <tr>
+            <td><strong>Apr 12</strong><br><span style="font-size:.78rem;color:var(--muted)">Saturday</span></td>
+            <td><div class="exam-subject">Computer Networks</div><div class="exam-code">Theory</div></td>
+            <td>CS404</td>
+            <td>09:00 – 12:00</td>
+            <td>3 hrs</td>
+            <td><span class="hall-badge">Hall C — 08</span></td>
+          </tr>
+          <tr>
+            <td><strong>Apr 14</strong><br><span style="font-size:.78rem;color:var(--muted)">Monday</span></td>
+            <td><div class="exam-subject">Software Engineering</div><div class="exam-code">Theory</div></td>
+            <td>CS405</td>
+            <td>09:00 – 12:00</td>
+            <td>3 hrs</td>
+            <td><span class="hall-badge">Hall B — 17</span></td>
+          </tr>
+          <tr>
+            <td><strong>Apr 16</strong><br><span style="font-size:.78rem;color:var(--muted)">Wednesday</span></td>
+            <td><div class="exam-subject">CS Lab — DBMS</div><div class="exam-code">Practical</div></td>
+            <td>CS406</td>
+            <td>09:00 – 12:00</td>
+            <td>3 hrs</td>
+            <td><span class="hall-badge">Lab 2 — 05</span></td>
+          </tr>
+          <tr>
+            <td><strong>Apr 18</strong><br><span style="font-size:.78rem;color:var(--muted)">Friday</span></td>
+            <td><div class="exam-subject">CS Lab — Networks</div><div class="exam-code">Practical</div></td>
+            <td>CS407</td>
+            <td>02:00 – 05:00</td>
+            <td>3 hrs</td>
+            <td><span class="hall-badge">Lab 3 — 12</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ─── GRADES PAGE ─── -->
+    <div class="page" id="page-grades">
+      <div class="sem-tabs" id="sem-tabs">
+        <button class="sem-tab" onclick="setSemester('sem3', this)">Semester 3 — 2023-24 (Last Year)</button>
+        <button class="sem-tab active" onclick="setSemester('sem4', this)">Semester 4 — 2024-25 (Current)</button>
+      </div>
+
+      <div class="gpa-row">
+        <div class="gpa-card">
+          <div class="label">SGPA</div>
+          <div class="value" id="grade-sgpa">—</div>
+        </div>
+        <div class="gpa-card">
+          <div class="label">CGPA (cumulative)</div>
+          <div class="value" id="grade-cgpa">—</div>
+        </div>
+        <div class="gpa-card">
+          <div class="label">Credits Earned</div>
+          <div class="value" id="grade-credits">—</div>
+        </div>
+      </div>
+
+      <table class="grades-table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Code</th>
+            <th>Credits</th>
+            <th>Internal</th>
+            <th>External</th>
+            <th>Total</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody id="grades-body"><!-- filled by JS --></tbody>
+      </table>
+    </div>
+
+    <!-- ─── STUDY MATERIAL PAGE ─── -->
+    <div class="page" id="page-materials">
+      <div class="materials-grid" id="materials-grid"><!-- filled by JS --></div>
+    </div>
+
+    <!-- ─── FEE DETAILS PAGE ─── -->
+    <div class="page" id="page-fees">
+      <div class="fees-grid">
+        <div class="fee-breakdown-card">
+          <h3 style="font-size:1rem;font-weight:800;margin-bottom:18px;">Semester 4 Fee Breakdown</h3>
+          <div id="fee-breakdown-body"><!-- filled by JS --></div>
+        </div>
+        <div class="fee-summary-card">
+          <div class="label">Amount Due</div>
+          <div class="amount" id="fee-amount-due">₹0</div>
+          <div><span class="fee-status-pill" id="fee-status-pill">—</span></div>
+          <button class="btn-pay" id="btn-pay" onclick="payFee()">Pay Now →</button>
+          <div class="fee-paid-note" id="fee-paid-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SETTINGS PAGE ─── -->
+    <div class="page" id="page-settings">
+      <div class="settings-grid">
+        <div class="settings-avatar-card">
+          <div class="settings-avatar" id="settings-avatar">AS</div>
+          <label class="btn-upload" for="avatar-upload">Upload Photo</label>
+          <input type="file" id="avatar-upload" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)" />
+          <button class="btn-remove-pic" onclick="removeAvatar()">Remove photo</button>
+        </div>
+
+        <div>
+          <div class="settings-card">
+            <h3>Personal Details</h3>
+            <div class="settings-form-grid">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="settings-name" />
+              </div>
+              <div class="form-group">
+                <label>Roll Number / Email</label>
+                <input type="text" id="settings-username" disabled />
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="settings-phone" placeholder="e.g. 9876543210" />
+              </div>
+              <div class="form-group">
+                <label>Department</label>
+                <input type="text" id="settings-department" placeholder="e.g. Computer Science" />
+              </div>
+              <div class="form-group full">
+                <label>Address</label>
+                <input type="text" id="settings-address" placeholder="e.g. Hyderabad, Telangana" />
+              </div>
+            </div>
+            <button class="btn-save" onclick="saveProfileDetails()">Save Changes</button>
+            <div class="settings-msg" id="profile-msg"></div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Change Password</h3>
+            <div class="settings-form-grid">
+              <div class="form-group full">
+                <label>Current Password</label>
+                <input type="password" id="settings-current-password" />
+              </div>
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" id="settings-new-password" />
+              </div>
+              <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="settings-confirm-password" />
+              </div>
+            </div>
+            <button class="btn-save" onclick="changePassword()">Update Password</button>
+            <div class="settings-msg" id="password-msg"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ADMIN PAGES ═══ -->
+    <div class="role-page" id="page-admin-dashboard">
+      <div class="college-banner">
+        <h2>🛡 Admin Control Center</h2>
+        <p id="admin-college-label">Mani University — College Administration</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card" data-icon="🎒">
+          <div class="label">Total Students</div>
+          <div class="value" id="admin-student-count" style="color:var(--accent2)">0</div>
+          <div class="change up">Enrolled at Mani University</div>
+        </div>
+        <div class="stat-card" data-icon="📖">
+          <div class="label">Faculty Members</div>
+          <div class="value" id="admin-faculty-count" style="color:var(--accent3)">0</div>
+          <div class="change up">Active teachers</div>
+        </div>
+        <div class="stat-card" data-icon="💰">
+          <div class="label">Total Fines Collected</div>
+          <div class="value" id="admin-fines-total" style="color:var(--accent)">₹0</div>
+          <div class="change warn">Across all students</div>
+        </div>
+        <div class="stat-card" data-icon="📝">
+          <div class="label">Active Assignments</div>
+          <div class="value" id="admin-assign-count">0</div>
+          <div class="change up">Posted by faculty</div>
+        </div>
+      </div>
+      <div class="panel-card">
+        <h3>Recent Student Registrations</h3>
+        <div id="admin-recent-students"></div>
+      </div>
+    </div>
+
+    <div class="role-page" id="page-admin-teachers">
+      <div class="panel-card">
+        <h3>Hire New Faculty</h3>
+        <div class="inline-form">
+          <div class="form-group"><label>Full Name</label><input type="text" id="hire-name" placeholder="Prof. Name" /></div>
+          <div class="form-group"><label>Faculty ID / Email</label><input type="text" id="hire-username" placeholder="FAC002" /></div>
+          <div class="form-group"><label>Department</label><input type="text" id="hire-dept" placeholder="Computer Science" /></div>
+          <div class="form-group"><label>Password</label><input type="password" id="hire-password" placeholder="Min 6 chars" /></div>
+          <button class="btn-sm btn-success" onclick="hireTeacher()">Hire Faculty →</button>
+        </div>
+        <div class="settings-msg" id="hire-msg"></div>
+      </div>
+      <div class="panel-card">
+        <h3>Faculty List — Mani University</h3>
+        <table class="mgmt-table">
+          <thead><tr><th>Name</th><th>Faculty ID</th><th>Department</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="admin-teachers-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="role-page" id="page-admin-marks">
+      <div class="panel-card">
+        <h3>Edit Student Marks</h3>
+        <div class="inline-form">
+          <div class="form-group"><label>Student</label><select id="admin-mark-student"></select></div>
+          <div class="form-group"><label>Subject</label><select id="admin-mark-subject"></select></div>
+          <div class="form-group"><label>Internal (/30)</label><input type="number" id="admin-mark-internal" min="0" max="30" /></div>
+          <div class="form-group"><label>External (/70)</label><input type="number" id="admin-mark-external" min="0" max="70" /></div>
+          <button class="btn-sm btn-dark" onclick="saveAdminMarks()">Save Marks</button>
+        </div>
+        <div class="settings-msg" id="admin-mark-msg"></div>
+      </div>
+      <div class="panel-card">
+        <h3>All Student Marks — Semester 4</h3>
+        <div id="admin-marks-overview"></div>
+      </div>
+    </div>
+
+    <div class="role-page" id="page-admin-fines">
+      <div class="panel-card">
+        <h3>Issue Fine to Student</h3>
+        <div class="inline-form">
+          <div class="form-group"><label>Student</label><select id="admin-fine-student"></select></div>
+          <div class="form-group"><label>Reason</label><input type="text" id="admin-fine-reason" placeholder="e.g. Late submission, misconduct" /></div>
+          <div class="form-group"><label>Amount (₹)</label><input type="number" id="admin-fine-amount" min="1" placeholder="500" /></div>
+          <button class="btn-sm btn-danger" onclick="issueFine()">Issue Fine</button>
+        </div>
+        <div class="settings-msg" id="admin-fine-msg"></div>
+      </div>
+      <div class="panel-card">
+        <h3>All Issued Fines</h3>
+        <table class="mgmt-table">
+          <thead><tr><th>Student</th><th>Reason</th><th>Amount</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="admin-fines-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ FACULTY PAGES ═══ -->
+    <div class="role-page" id="page-faculty-dashboard">
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2 id="faculty-welcome">Welcome, Professor!</h2>
+          <p id="faculty-welcome-sub">Manage assignments, marks, and attendance for your classes at Mani University.</p>
+        </div>
+        <div class="welcome-illus">📖</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card" data-icon="📝">
+          <div class="label">My Assignments</div>
+          <div class="value" id="faculty-my-assigns" style="color:var(--accent2)">0</div>
+        </div>
+        <div class="stat-card" data-icon="🎒">
+          <div class="label">Students</div>
+          <div class="value" id="faculty-student-count" style="color:var(--accent3)">0</div>
+        </div>
+        <div class="stat-card" data-icon="📊">
+          <div class="label">Subjects</div>
+          <div class="value">7</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="role-page" id="page-faculty-assign">
+      <div class="panel-card">
+        <h3>Create New Assignment</h3>
+        <div class="inline-form">
+          <div class="form-group"><label>Title</label><input type="text" id="fac-assign-title" placeholder="Assignment title" /></div>
+          <div class="form-group"><label>Subject</label><select id="fac-assign-subject"></select></div>
+          <div class="form-group"><label>Due Date</label><input type="date" id="fac-assign-due" /></div>
+          <button class="btn-sm btn-primary" onclick="createAssignment()">Post Assignment →</button>
+        </div>
+        <div class="settings-msg" id="fac-assign-msg"></div>
+      </div>
+      <div class="panel-card">
+        <h3>My Posted Assignments</h3>
+        <div id="faculty-assign-list"></div>
+      </div>
+    </div>
+
+    <div class="role-page" id="page-faculty-marks">
+      <div class="panel-card">
+        <h3>Add / Update Marks</h3>
+        <div class="inline-form">
+          <div class="form-group"><label>Student</label><select id="fac-mark-student"></select></div>
+          <div class="form-group"><label>Subject</label><select id="fac-mark-subject"></select></div>
+          <div class="form-group"><label>Internal (/30)</label><input type="number" id="fac-mark-internal" min="0" max="30" /></div>
+          <div class="form-group"><label>External (/70)</label><input type="number" id="fac-mark-external" min="0" max="70" /></div>
+          <button class="btn-sm btn-dark" onclick="saveFacultyMarks()">Save Marks</button>
+        </div>
+        <div class="settings-msg" id="fac-mark-msg"></div>
+      </div>
+    </div>
+
+    <div class="role-page" id="page-faculty-attendance">
+      <div class="panel-card">
+        <h3>Take Attendance</h3>
+        <div class="inline-form">
+          <div class="form-group"><label>Subject</label><select id="fac-att-subject"></select></div>
+          <div class="form-group"><label>Date</label><input type="date" id="fac-att-date" /></div>
+          <button class="btn-sm btn-success" onclick="saveFacultyAttendance()">Save Attendance</button>
+        </div>
+        <div class="settings-msg" id="fac-att-msg"></div>
+      </div>
+      <div class="panel-card">
+        <h3>Mark Students Present / Absent</h3>
+        <table class="mgmt-table">
+          <thead><tr><th>Roll No.</th><th>Student Name</th><th>Status</th></tr></thead>
+          <tbody id="fac-att-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const COLLEGE_NAME = 'Mani University';
+  const SUBJECTS = [
+    { name:'Operating Systems', code:'CS401', credits:4, maxInternal:30, maxExternal:70 },
+    { name:'Database Management Systems', code:'CS402', credits:4, maxInternal:30, maxExternal:70 },
+    { name:'Theory of Computation', code:'CS403', credits:3, maxInternal:30, maxExternal:70 },
+    { name:'Computer Networks', code:'CS404', credits:4, maxInternal:30, maxExternal:70 },
+    { name:'Software Engineering', code:'CS405', credits:3, maxInternal:30, maxExternal:70 },
+    { name:'CS Lab — DBMS', code:'CS406', credits:2, maxInternal:50, maxExternal:0 },
+    { name:'CS Lab — Networks', code:'CS407', credits:2, maxInternal:50, maxExternal:0 },
+  ];
+
+  const USERS_KEY = 'edunest_users';
+  const ASSIGN_KEY = 'edunest_assignments';
+  const MARKS_KEY = 'edunest_marks';
+  const ATT_KEY = 'edunest_attendance';
+  const FINES_KEY = 'edunest_fines';
+  const SEED_KEY = 'edunest_seeded_v2';
+
+  let currentRole = 'student';
+  let currentRegRole = 'student';
+  let currentUser = null;
+  let currentSemester = 'sem4';
+  let facultyAttState = {};
+
+  const NAV_CONFIG = {
+    student: [
+      { label:'Main', items:[
+        { page:'dashboard', icon:'🏠', text:'Dashboard' },
+        { page:'assignments', icon:'📝', text:'Assignments' },
+        { page:'attendance', icon:'📊', text:'Attendance' },
+        { page:'timetable', icon:'📅', text:'Exam Timetable' },
+      ]},
+      { label:'Academic', items:[
+        { page:'grades', icon:'🏅', text:'Grades' },
+        { page:'materials', icon:'📚', text:'Study Material' },
+        { page:'fees', icon:'💳', text:'Fee Details' },
+      ]},
+      { label:'Support', items:[
+        { page:'settings', icon:'⚙️', text:'Settings' },
+      ]},
+    ],
+    faculty: [
+      { label:'Faculty', items:[
+        { page:'faculty-dashboard', icon:'🏠', text:'Dashboard' },
+        { page:'faculty-assign', icon:'📝', text:'Assignments' },
+        { page:'faculty-marks', icon:'🏅', text:'Add Marks' },
+        { page:'faculty-attendance', icon:'📊', text:'Attendance' },
+        { page:'settings', icon:'⚙️', text:'Settings' },
+      ]},
+    ],
+    admin: [
+      { label:'Administration', items:[
+        { page:'admin-dashboard', icon:'🏠', text:'Dashboard' },
+        { page:'admin-teachers', icon:'📖', text:'Manage Teachers' },
+        { page:'admin-marks', icon:'🏅', text:'Edit Marks' },
+        { page:'admin-fines', icon:'💰', text:'Issue Fines' },
+        { page:'settings', icon:'⚙️', text:'Settings' },
+      ]},
+    ],
+  };
+
+  const PAGE_TITLES = {
+    dashboard:'Dashboard', assignments:'Assignments', attendance:'Attendance',
+    timetable:'Exam Timetable', grades:'Grades & Results', materials:'Study Material',
+    fees:'Fee Details', settings:'Settings',
+    'admin-dashboard':'Admin Dashboard', 'admin-teachers':'Manage Teachers',
+    'admin-marks':'Edit Student Marks', 'admin-fines':'Issue Fines',
+    'faculty-dashboard':'Faculty Dashboard', 'faculty-assign':'Post Assignments',
+    'faculty-marks':'Add Marks', 'faculty-attendance':'Take Attendance',
+  };
+
+  const materials = [
+    { subject:'Operating Systems', code:'CS401', title:'Unit 1–5 Complete Notes', type:'PDF', icon:'💻', bg:'#eef3ff' },
+    { subject:'Database Management', code:'CS402', title:'ER Modeling & Normalization Slides', type:'PPT', icon:'🗄️', bg:'#f0fef7' },
+    { subject:'Computer Networks', code:'CS404', title:'OSI & TCP/IP Reference Guide', type:'PDF', icon:'🌐', bg:'#fff5f0' },
+    { subject:'Theory of Computation', code:'CS403', title:'Automata Theory Handbook', type:'PDF', icon:'🧮', bg:'#f5f0ff' },
+    { subject:'Software Engineering', code:'CS405', title:'SDLC & Design Patterns Deck', type:'PPT', icon:'⚙️', bg:'#fff8f0' },
+    { subject:'Data Structures', code:'CS301', title:'Previous Year Question Bank', type:'PDF', icon:'📘', bg:'#eef3ff' },
+  ];
+
+  const feeItems = [
+    { label:'Tuition Fee', amount:45000 }, { label:'Examination Fee', amount:3500 },
+    { label:'Library Fee', amount:1200 }, { label:'Laboratory Fee', amount:2800 },
+    { label:'Sports & Activity Fee', amount:1000 }, { label:'Development Fee', amount:2500 },
+  ];
+  const feeTotal = feeItems.reduce((s, f) => s + f.amount, 0);
+
+  function formatINR(n) { return '₹' + n.toLocaleString('en-IN'); }
+  function initials(name) { return name.trim().split(/\s+/).slice(0, 2).map(w => w[0].toUpperCase()).join(''); }
+  function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+  function getStore(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+  }
+  function setStore(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+  // Users cache (server is source-of-truth). Refresh after login.
+  let USERS_CACHE = [];
+  const DEMO_USERS = [
+    { name:'Arjun Sharma', username:'STU2024001', password:'student123', role:'student', phone:'9876543210', department:'Computer Science', address:'Hyderabad', profilePic:'', feePaid:false, active:true },
+    { name:'Priya Reddy', username:'STU2024002', password:'student123', role:'student', phone:'9876543211', department:'Computer Science', address:'Warangal', profilePic:'', feePaid:false, active:true },
+    { name:'Prof. Meena Krishnan', username:'FAC001', password:'faculty123', role:'faculty', phone:'', department:'Computer Science', address:'', profilePic:'', active:true },
+    { name:'Prof. Ramesh Babu', username:'FAC002', password:'faculty123', role:'faculty', phone:'', department:'Computer Science', address:'', profilePic:'', feePaid:false, active:true },
+    { name:'Admin Officer', username:'91822', password:'mani1559', role:'admin', phone:'', department:'Administration', address:'', profilePic:'', feePaid:false, active:true }
+  ];
+
+  async function refreshUsersCache() {
+    try {
+      const res = await fetch('http://localhost:5000/api/users', { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error('Users API returned ' + res.status);
+      const data = await res.json();
+      USERS_CACHE = Array.isArray(data) ? data : [];
+      if (!USERS_CACHE.length) USERS_CACHE = DEMO_USERS.map(u => ({...u}));
+    } catch (e) {
+      console.warn('Using demo users because /api/users is unavailable:', e);
+      USERS_CACHE = DEMO_USERS.map(u => ({...u}));
+    }
+  }
+
+  function getUsers() { return USERS_CACHE; }
+  function saveUsers(u) { USERS_CACHE = Array.isArray(u) ? u : USERS_CACHE; }
+  function getAssignments() { return getStore(ASSIGN_KEY, []); }
+  function saveAssignments(a) { setStore(ASSIGN_KEY, a); }
+  function getAllMarks() { return getStore(MARKS_KEY, {}); }
+  function saveAllMarks(m) { setStore(MARKS_KEY, m); }
+  function getAllAttendance() { return getStore(ATT_KEY, {}); }
+  function saveAllAttendance(a) { setStore(ATT_KEY, a); }
+  function getAllFines() { return getStore(FINES_KEY, []); }
+  function saveAllFines(f) { setStore(FINES_KEY, f); }
+
+  function getStudents() { return getUsers().filter(u => u.role === 'student' && u.active !== false); }
+  function getFaculty() { return getUsers().filter(u => u.role === 'faculty' && u.active !== false); }
+
+  function getStudentMarks(username) {
+    const all = getAllMarks();
+    if (!all[username]) {
+      all[username] = {};
+      SUBJECTS.forEach(s => {
+        all[username][s.code] = { internal: Math.floor(Math.random()*8)+20, external: s.maxExternal ? Math.floor(Math.random()*15)+48 : 0 };
+      });
+      saveAllMarks(all);
+    }
+    return all[username];
+  }
+
+  function getStudentAttendance(username) {
+    const all = getAllAttendance();
+    if (!all[username]) {
+      all[username] = {};
+      SUBJECTS.forEach(s => {
+        const total = 40 + Math.floor(Math.random()*15);
+        const present = Math.floor(total * (0.65 + Math.random()*0.3));
+        all[username][s.code] = { present, absent: total - present, total };
+      });
+      saveAllAttendance(all);
+    }
+    return all[username];
+  }
+
+  function seedDemoData() {
+    if (localStorage.getItem(SEED_KEY)) return;
+    const users = [
+      { name:'Arjun Sharma', username:'STU2024001', password:'student123', role:'student', phone:'9876543210', department:'Computer Science', address:'Hyderabad', profilePic:'', feePaid:false, active:true },
+      { name:'Priya Reddy', username:'STU2024002', password:'student123', role:'student', phone:'9876543211', department:'Computer Science', address:'Warangal', profilePic:'', feePaid:false, active:true },
+      { name:'Prof. Meena Krishnan', username:'FAC001', password:'faculty123', role:'faculty', phone:'', department:'Computer Science', address:'', profilePic:'', active:true },
+      { name:'Prof. Ramesh Babu', username:'FAC002', password:'faculty123', role:'faculty', phone:'', department:'Computer Science', address:'', profilePic:'', active:true },
+      { name:'Admin Officer', username:'91822', password:'mani1559', role:'admin', phone:'', department:'Administration', address:'', profilePic:'', active:true },
+    ];
+    saveUsers(users);
+    saveAssignments([
+      { id:1, title:'OS Chapter 4 Report', subject:'Operating Systems', code:'CS401', icon:'💻', bg:'#eef3ff', status:'pending', due:'2025-03-28', profUsername:'FAC001', profName:'Prof. Meena Krishnan' },
+      { id:2, title:'DBMS Lab Assignment #3', subject:'Database Management', code:'CS402', icon:'🗄️', bg:'#f0fef7', status:'pending', due:'2025-04-02', profUsername:'FAC002', profName:'Prof. Ramesh Babu' },
+      { id:3, title:'CN Protocol Analysis', subject:'Computer Networks', code:'CS404', icon:'🌐', bg:'#fff5f0', status:'pending', due:'2025-04-08', profUsername:'FAC001', profName:'Prof. Meena Krishnan' },
+    ]);
+    localStorage.setItem(SEED_KEY, '1');
+  }
+  seedDemoData();
+  if (!USERS_CACHE.length) USERS_CACHE = DEMO_USERS.map(u => ({...u}));
+
+  function setRole(r, tab) {
+    currentRole = r;
+    tab.parentElement.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const subs = { student:'Sign in to your student portal', faculty:'Sign in to your faculty portal', admin:'Sign in to the admin portal' };
+    document.getElementById('login-sub').textContent = subs[r] || 'Sign in to continue';
+  }
+
+  function setRegRole(r, tab) {
+    currentRegRole = r;
+    tab.parentElement.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  }
+
+  function showAuthForm(which) {
+    ['login-error','register-error','register-success'].forEach(id => document.getElementById(id).style.display = 'none');
+    document.getElementById('login-form-wrap').classList.toggle('hidden', which !== 'login');
+    document.getElementById('register-form-wrap').classList.toggle('hidden', which !== 'register');
+  }
+
+  function doRegister() {
+    const name = document.getElementById('reg-name').value.trim();
+    const username = document.getElementById('reg-username').value.trim();
+    const password = document.getElementById('reg-password').value.trim();
+    const confirm = document.getElementById('reg-confirm-password').value.trim();
+    const err = document.getElementById('register-error');
+    const success = document.getElementById('register-success');
+    success.style.display = 'none';
+    if (!name || !username || !password || !confirm) { err.textContent = 'Please fill in every field.'; err.style.display = 'block'; return; }
+    if (password.length < 6) { err.textContent = 'Password must be at least 6 characters.'; err.style.display = 'block'; return; }
+    if (password !== confirm) { err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return; }
+    const users = getUsers();
+    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+      err.textContent = 'An account with that ID already exists.'; err.style.display = 'block'; return;
+    }
+    if (currentRegRole === 'admin') { err.textContent = 'Admin accounts cannot be self-registered.'; err.style.display = 'block'; return; }
+    // Create account on server, then keep local profile for role/metadata
+    (async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email: username, password, role: currentRegRole })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          err.textContent = data.message || 'Registration failed.';
+          err.style.display = 'block';
+          return;
+        }
+
+        // Upsert local cached profile from server (keeps frontend features working)
+        const serverUser = data.user || {};
+        const localIdx = users.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
+        const localProfile = {
+          name: serverUser.name || name,
+          username: username,
+          password: '',
+          role: serverUser.role || currentRegRole,
+          phone: serverUser.phone || '',
+          department: serverUser.department || '',
+          address: serverUser.address || '',
+          profilePic: serverUser.profilePic || '',
+          feePaid: serverUser.feePaid || false,
+          active: typeof serverUser.active === 'boolean' ? serverUser.active : true,
+          serverId: serverUser.id || null
+        };
+
+        if (localIdx === -1) users.push(localProfile); else users[localIdx] = Object.assign({}, users[localIdx], localProfile);
+        saveUsers(users);
+
+        err.style.display = 'none';
+        success.textContent = 'Account created! You can now sign in.';
+        success.style.display = 'block';
+        ['reg-name','reg-username','reg-password','reg-confirm-password'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('username').value = username;
+        setTimeout(() => showAuthForm('login'), 1200);
+      } catch (e) {
+        err.textContent = 'Registration error. Check your network.';
+        err.style.display = 'block';
+        console.error(e);
+      }
+    })();
+  }
+
+  async function doLogin() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value;
+    const err = document.getElementById('login-error');
+
+    err.style.display = 'none';
+    if (!u || !p) {
+      err.textContent = 'Please enter credentials.';
+      err.style.display = 'block';
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email: u, password: p })
+      });
+
+      let data = {};
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) data = await res.json();
+      else throw new Error('Login API returned a non-JSON response (' + res.status + ').');
+
+      if (!res.ok) {
+        err.textContent = data.message || 'Invalid credentials.';
+        err.style.display = 'block';
+        return;
+      }
+
+      const serverUser = data.user || {};
+      if (serverUser.active === false) {
+        err.textContent = 'This account has been deactivated.';
+        err.style.display = 'block';
+        return;
+      }
+      if (serverUser.role && serverUser.role !== currentRole) {
+        err.textContent = `This account is registered as ${serverUser.role}. Please select the correct role tab.`;
+        err.style.display = 'block';
+        return;
+      }
+
+      const cached = {
+        name: serverUser.name || u,
+        username: serverUser.email || serverUser.username || u,
+        password: '',
+        role: serverUser.role || currentRole,
+        phone: serverUser.phone || '',
+        department: serverUser.department || '',
+        address: serverUser.address || '',
+        profilePic: serverUser.profilePic || '',
+        feePaid: !!serverUser.feePaid,
+        active: typeof serverUser.active === 'boolean' ? serverUser.active : true,
+        serverId: serverUser.id || serverUser._id || null
+      };
+
+      const users = getUsers();
+      const idx = users.findIndex(x => String(x.username).toLowerCase() === u.toLowerCase());
+      if (idx === -1) users.push(cached); else users[idx] = Object.assign({}, users[idx], cached);
+      saveUsers(users);
+      currentUser = Object.assign({}, cached, { id: cached.serverId });
+
+    } catch (apiError) {
+      // Development fallback: the portal remains usable even when the backend is down.
+      const demo = DEMO_USERS.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
+      if (!demo) {
+        console.error('Login API error:', apiError);
+        err.textContent = 'Cannot reach the login server. Start the backend, or use a valid account.';
+        err.style.display = 'block';
+        return;
+      }
+      if (demo.role !== currentRole) {
+        err.textContent = `This account is registered as ${demo.role}. Please select the correct role tab.`;
+        err.style.display = 'block';
+        return;
+      }
+      currentUser = {...demo};
+      USERS_CACHE = DEMO_USERS.map(x => ({...x}));
+    }
+
+    try { await refreshUsersCache(); } catch (_) {}
+    document.getElementById('login-page').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    renderSidebarNav();
+    renderUserChrome();
+    const firstPage = currentUser.role === 'admin' ? 'admin-dashboard' : currentUser.role === 'faculty' ? 'faculty-dashboard' : 'dashboard';
+    gotoPage(firstPage);
+  }
+
+  function renderSidebarNav() {
+    const nav = document.getElementById('sidebar-nav');
+    const config = NAV_CONFIG[currentUser.role] || NAV_CONFIG.student;
+    nav.innerHTML = config.map(section => `
+      <span class="nav-label">${section.label}</span>
+      ${section.items.map(item => `
+        <button class="nav-link" data-page="${item.page}" onclick="gotoPage('${item.page}', this)">
+          <span class="icon">${item.icon}</span> ${item.text}
+        </button>`).join('')}
+    `).join('');
+  }
+
+  function renderUserChrome() {
+    if (!currentUser) return;
+    setAvatarEl('sidebar-avatar', currentUser);
+    setAvatarEl('topbar-avatar', currentUser);
+    document.getElementById('sidebar-name').textContent = currentUser.name;
+    const roleLabel = { student:'Student', faculty:'Faculty', admin:'Admin' }[currentUser.role] || currentUser.role;
+    document.getElementById('sidebar-roll').textContent = `${currentUser.username} • ${roleLabel}`;
+    const welcome = document.getElementById('welcome-name');
+    if (welcome) welcome.textContent = `Good morning, ${currentUser.name.split(' ')[0]}! 👋`;
+    const fw = document.getElementById('faculty-welcome');
+    if (fw) fw.textContent = `Welcome, ${currentUser.name.split(' ')[0]}! 📖`;
+  }
+
+  function setAvatarEl(elId, user) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    el.innerHTML = user.profilePic ? `<img src="${user.profilePic}" alt="${user.name}" />` : '';
+    if (!user.profilePic) el.textContent = initials(user.name);
+  }
+
+  function persistCurrentUser() {
+    // persist profile updates to server (best-effort)
+    (async () => {
+      try {
+        if (!currentUser?.id) return;
+        const updates = {
+          name: currentUser.name,
+          role: currentUser.role,
+          phone: currentUser.phone,
+          department: currentUser.department,
+          address: currentUser.address,
+          profilePic: currentUser.profilePic,
+          feePaid: currentUser.feePaid,
+          active: currentUser.active,
+        };
+        await fetch('http://localhost:5000/api/users/' + currentUser.id, {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates)
+        });
+        await refreshUsersCache();
+      } catch (e) { console.error('Persist user failed', e); }
+    })();
+  }
+
+  document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('username').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+  function doLogout() {
+    currentUser = null;
+    document.getElementById('app').classList.add('hidden');
+    document.getElementById('login-page').classList.remove('hidden');
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    showAuthForm('login');
+  }
+
+  function gotoPage(name, btn) {
+    document.querySelectorAll('.page, .role-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+    const pageEl = document.getElementById('page-' + name);
+    if (pageEl) pageEl.classList.add('active');
+    if (btn) btn.classList.add('active');
+    else document.querySelector(`.nav-link[data-page="${name}"]`)?.classList.add('active');
+    document.getElementById('topbar-title').textContent = PAGE_TITLES[name] || name;
+
+    if (name === 'assignments') renderAssignments('all');
+    if (name === 'grades') renderGrades();
+    if (name === 'materials') renderMaterials();
+    if (name === 'fees') renderFees();
+    if (name === 'attendance') renderStudentAttendance();
+    if (name === 'settings') renderSettings();
+    if (name === 'admin-dashboard') renderAdminDashboard();
+    if (name === 'admin-teachers') renderAdminTeachers();
+    if (name === 'admin-marks') renderAdminMarksPage();
+    if (name === 'admin-fines') renderAdminFines();
+    if (name === 'faculty-dashboard') renderFacultyDashboard();
+    if (name === 'faculty-assign') renderFacultyAssign();
+    if (name === 'faculty-marks') renderFacultyMarksPage();
+    if (name === 'faculty-attendance') renderFacultyAttendancePage();
+  }
+
+  function renderAssignments(filter) {
+    const list = document.getElementById('assignment-list');
+    if (!list) return;
+    const all = getAssignments();
+    const filtered = filter === 'all' ? all : all.filter(a => a.status === filter);
+    const counts = { all:all.length, pending:all.filter(a=>a.status==='pending').length, submitted:all.filter(a=>a.status==='submitted').length, graded:all.filter(a=>a.status==='graded').length, overdue:all.filter(a=>a.status==='overdue').length };
+    document.querySelectorAll('.filter-btn').forEach((b,i) => {
+      const keys = ['all','pending','submitted','graded','overdue'];
+      if (keys[i]) b.textContent = `${b.textContent.split(' (')[0]} (${counts[keys[i]]})`;
+    });
+    if (!filtered.length) { list.innerHTML = '<div class="empty-state">No assignments found.</div>'; return; }
+    list.innerHTML = filtered.map(a => {
+      const due = new Date(a.due).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+      const pillClass = { pending:'pill-pending', submitted:'pill-submitted', graded:'pill-graded', overdue:'pill-overdue' }[a.status] || 'pill-pending';
+      const pillText = { pending:'Pending', submitted:'Submitted', graded:`Graded ${a.grade||''}`, overdue:'Overdue' }[a.status] || 'Pending';
+      const actionBtn = a.status === 'pending' ? `<button class="btn-submit" onclick="submitAssignment(${a.id})">Submit ↑</button>` : '';
+      return `<div class="assignment-card">
+        <div class="assignment-icon" style="background:${a.bg||'#eef3ff'}">${a.icon||'📝'}</div>
+        <div class="assignment-info"><div class="assignment-title">${a.title}</div><div class="assignment-sub">${a.subject} • ${a.profName||'Faculty'}</div></div>
+        <div class="assignment-right"><div class="assignment-due"><strong>${due}</strong>Due Date</div>
+        <span class="status-pill ${pillClass}">${pillText}</span>${actionBtn}</div></div>`;
+    }).join('');
+  }
+
+  function filterAssign(filter, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderAssignments(filter);
+  }
+
+  function submitAssignment(id) {
+    const assigns = getAssignments();
+    const a = assigns.find(x => x.id === id);
+    if (a) { a.status = 'submitted'; saveAssignments(assigns); renderAssignments('all'); alert('Assignment submitted successfully!'); }
+  }
+
+  function renderStudentAttendance() {
+    if (!currentUser || currentUser.role !== 'student') return;
+    const att = getStudentAttendance(currentUser.username);
+    let totalP = 0, totalA = 0, totalC = 0;
+    Object.values(att).forEach(v => { totalP += v.present; totalA += v.absent; totalC += v.total; });
+    const pct = totalC ? Math.round(totalP / totalC * 100) : 0;
+    const circle = document.querySelector('#page-attendance .big-circle');
+    if (circle) circle.style.background = `conic-gradient(var(--accent3) 0% ${pct}%, var(--cream) ${pct}% 100%)`;
+    const pctEl = document.querySelector('#page-attendance .big-circle-pct');
+    if (pctEl) pctEl.textContent = pct + '%';
+    const breakdown = document.querySelector('#page-attendance .att-breakdown');
+    if (breakdown) {
+      const rows = breakdown.querySelectorAll('.att-row2 strong');
+      if (rows.length >= 3) { rows[0].textContent = totalP; rows[1].textContent = totalA; rows[2].textContent = totalC; }
+    }
+    const rows = document.querySelectorAll('#page-attendance .att-subject-list .att-subject-row:not(.header)');
+    rows.forEach((row, i) => {
+      const sub = SUBJECTS[i];
+      if (!sub) return;
+      const d = att[sub.code] || { present:0, absent:0, total:0 };
+      const p = d.total ? Math.round(d.present / d.total * 100) : 0;
+      const spans = row.querySelectorAll('span');
+      if (spans.length >= 4) {
+        spans[0].textContent = d.total; spans[1].textContent = d.present; spans[2].textContent = d.absent;
+        const pill = spans[3].querySelector('.att-pct-pill');
+        if (pill) { pill.textContent = p + '%'; pill.className = 'att-pct-pill ' + (p >= 85 ? 'safe' : p >= 75 ? 'warn2' : 'danger'); }
+      }
+    });
+  }
+
+  function gradeFromPct(pct) {
+    if (pct >= 90) return { letter:'O', point:10, cls:'safe' };
+    if (pct >= 80) return { letter:'A+', point:9, cls:'safe' };
+    if (pct >= 70) return { letter:'A', point:8, cls:'safe' };
+    if (pct >= 60) return { letter:'B+', point:7, cls:'warn2' };
+    if (pct >= 50) return { letter:'B', point:6, cls:'warn2' };
+    if (pct >= 40) return { letter:'C', point:5, cls:'warn2' };
+    return { letter:'F', point:0, cls:'danger' };
+  }
+
+  function setSemester(sem, btn) {
+    currentSemester = sem;
+    document.querySelectorAll('.sem-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderGrades();
+  }
+
+  function renderGrades() {
+    if (!currentUser) return;
+    const marks = getStudentMarks(currentUser.username);
+    const body = document.getElementById('grades-body');
+    let totalPoints = 0, totalCredits = 0;
+    body.innerHTML = SUBJECTS.map(s => {
+      const m = marks[s.code] || { internal:0, external:0 };
+      const total = m.internal + m.external;
+      const max = s.maxInternal + s.maxExternal;
+      const g = gradeFromPct(max ? total / max * 100 : 0);
+      totalPoints += g.point * s.credits;
+      totalCredits += s.credits;
+      return `<tr><td><strong>${s.name}</strong></td><td>${s.code}</td><td>${s.credits}</td>
+        <td>${m.internal}/${s.maxInternal}</td><td>${s.maxExternal ? m.external+'/'+s.maxExternal : '—'}</td>
+        <td>${total}/${max}</td><td><span class="grade-letter-pill ${g.cls}">${g.letter}</span></td></tr>`;
+    }).join('');
+    document.getElementById('grade-sgpa').textContent = (totalPoints / totalCredits).toFixed(2);
+    document.getElementById('grade-credits').textContent = totalCredits;
+    document.getElementById('grade-cgpa').textContent = (totalPoints / totalCredits).toFixed(2);
+  }
+
+  function renderMaterials() {
+    document.getElementById('materials-grid').innerHTML = materials.map((m, i) => `
+      <div class="material-card"><div class="material-icon" style="background:${m.bg}">${m.icon}</div>
+      <div class="material-title">${m.title}</div><div class="material-sub">${m.subject} • ${m.code}</div>
+      <div class="material-meta"><span class="material-type-pill">${m.type}</span>
+      <button class="btn-download" onclick="downloadMaterial(${i})">Download</button></div></div>`).join('');
+  }
+
+  function downloadMaterial(i) {
+    const m = materials[i];
+    const blob = new Blob([`${m.title}\nSubject: ${m.subject} (${m.code})\n\nPlaceholder study material.`], { type:'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = m.title.replace(/[^a-z0-9]+/gi,'_')+'.txt';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  }
+
+  function renderFees() {
+    document.getElementById('fee-breakdown-body').innerHTML = feeItems.map(f =>
+      `<div class="fee-row"><span>${f.label}</span><span>${formatINR(f.amount)}</span></div>`
+    ).join('') + `<div class="fee-row total"><span>Semester Total</span><span>${formatINR(feeTotal)}</span></div>`;
+
+    const fines = getAllFines().filter(f => f.username === currentUser?.username);
+    const fineTotal = fines.reduce((s, f) => s + f.amount, 0);
+    if (fineTotal > 0) {
+      document.getElementById('fee-breakdown-body').innerHTML += fines.map(f =>
+        `<div class="fee-row" style="color:var(--accent)"><span>⚠ Fine: ${f.reason}</span><span>${formatINR(f.amount)}</span></div>`
+      ).join('') + `<div class="fee-row total" style="color:var(--accent)"><span>Total with Fines</span><span>${formatINR(feeTotal + fineTotal)}</span></div>`;
+    }
+
+    const paid = !!(currentUser && currentUser.feePaid);
+    const due = paid ? fineTotal : feeTotal + fineTotal;
+    document.getElementById('fee-amount-due').textContent = formatINR(due);
+    const pill = document.getElementById('fee-status-pill');
+    pill.textContent = paid && !fineTotal ? 'Paid' : fineTotal ? 'Fines Due' : 'Payment Due';
+    pill.className = 'fee-status-pill ' + (paid && !fineTotal ? 'paid' : 'due');
+    document.getElementById('btn-pay').disabled = paid && !fineTotal;
+    document.getElementById('btn-pay').textContent = paid && !fineTotal ? 'Paid ✓' : 'Pay Now →';
+    document.getElementById('fee-paid-note').textContent = fineTotal
+      ? `You have ${formatINR(fineTotal)} in outstanding fines issued by admin.`
+      : paid ? 'Payment received for Semester 4.' : 'Simulated payment — no real transaction.';
+  }
+
+  function payFee() {
+    if (!currentUser) return;
+    const overlay = document.createElement('div');
+    overlay.className = 'pay-modal-overlay'; overlay.id = 'pay-modal-overlay';
+    overlay.innerHTML = `<div class="pay-modal"><div class="check">✓</div><h3>Confirm Payment</h3>
+      <p>Pay fees for Semester 4? (Simulated)</p>
+      <div style="display:flex;gap:10px;"><button class="btn-save" style="flex:1;background:#eee;color:var(--ink);" onclick="closePayModal()">Cancel</button>
+      <button class="btn-save" style="flex:1;" onclick="confirmPayFee()">Confirm</button></div></div>`;
+    document.body.appendChild(overlay);
+  }
+  function closePayModal() { document.getElementById('pay-modal-overlay')?.remove(); }
+  function confirmPayFee() {
+    currentUser.feePaid = true; persistCurrentUser(); closePayModal(); renderFees();
+    alert('Payment successful!');
+  }
+
+  function renderAdminDashboard() {
+    document.getElementById('admin-college-label').textContent = `${COLLEGE_NAME} — College Administration`;
+    document.getElementById('admin-student-count').textContent = getStudents().length;
+    document.getElementById('admin-faculty-count').textContent = getFaculty().length;
+    document.getElementById('admin-fines-total').textContent = formatINR(getAllFines().reduce((s,f)=>s+f.amount,0));
+    document.getElementById('admin-assign-count').textContent = getAssignments().length;
+    const recent = getStudents().slice(-5).reverse();
+    document.getElementById('admin-recent-students').innerHTML = recent.length
+      ? `<table class="mgmt-table"><thead><tr><th>Name</th><th>Roll No.</th><th>Department</th></tr></thead><tbody>
+        ${recent.map(s=>`<tr><td>${s.name}</td><td>${s.username}</td><td>${s.department||'—'}</td></tr>`).join('')}</tbody></table>`
+      : '<div class="empty-state">No students registered yet.</div>';
+  }
+
+  function renderAdminTeachers() {
+    document.getElementById('admin-teachers-body').innerHTML = getUsers().filter(u => u.role === 'faculty').map(t => `<tr>
+      <td><strong>${t.name}</strong></td><td>${t.username}</td><td>${t.department||'—'}</td>
+      <td><span class="status-pill ${t.active!==false?'pill-submitted':'pill-overdue'}">${t.active!==false?'Active':'Fired'}</span></td>
+      <td>${t.active!==false ? `<button class="btn-sm btn-danger" onclick="fireTeacher('${t.username}')">Fire</button>` : `<button class="btn-sm btn-success" onclick="rehireTeacher('${t.username}')">Rehire</button>`}</td>
+    </tr>`).join('') || '<tr><td colspan="5" class="empty-state">No faculty found.</td></tr>';
+  }
+
+  async function hireTeacher() {
+    const msg = document.getElementById('hire-msg');
+    const name = document.getElementById('hire-name').value.trim();
+    const username = document.getElementById('hire-username').value.trim();
+    const dept = document.getElementById('hire-dept').value.trim();
+    const password = document.getElementById('hire-password').value.trim();
+    if (!name || !username || !password) { msg.className='settings-msg err'; msg.textContent='Fill all required fields.'; msg.style.display='block'; return; }
+    if (password.length < 6) { msg.className='settings-msg err'; msg.textContent='Password must be 6+ chars.'; msg.style.display='block'; return; }
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email: username, password, role: 'faculty', department: dept })
+      });
+      const data = await res.json();
+      if (!res.ok) { msg.className='settings-msg err'; msg.textContent = data.message || 'Failed to hire.'; msg.style.display='block'; return; }
+      ['hire-name','hire-username','hire-dept','hire-password'].forEach(id => document.getElementById(id).value = '');
+      msg.className='settings-msg ok'; msg.textContent=`${name} hired at ${COLLEGE_NAME}!`; msg.style.display='block';
+      await refreshUsersCache();
+      renderAdminTeachers();
+    } catch (e) { msg.className='settings-msg err'; msg.textContent='Network error.'; msg.style.display='block'; }
+  }
+
+  function fireTeacher(username) {
+    if (!confirm(`Fire ${username}? They will lose portal access.`)) return;
+    (async () => {
+      try {
+        const u = getUsers().find(x => x.username === username);
+        if (!u || !u._id && !u.id) return;
+        const id = u._id || u.id;
+        await fetch('http://localhost:5000/api/users/' + id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: false }) });
+        await refreshUsersCache();
+        renderAdminTeachers();
+      } catch (e) { console.error(e); }
+    })();
+  }
+
+  function rehireTeacher(username) {
+    (async () => {
+      try {
+        const u = getUsers().find(x => x.username === username);
+        if (!u || !u._id && !u.id) return;
+        const id = u._id || u.id;
+        await fetch('http://localhost:5000/api/users/' + id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: true }) });
+        await refreshUsersCache();
+        renderAdminTeachers();
+      } catch (e) { console.error(e); }
+    })();
+  }
+
+  function populateStudentSelect(id) {
+    document.getElementById(id).innerHTML = getStudents().map(s => `<option value="${s.username}">${s.name} (${s.username})</option>`).join('');
+  }
+
+  function populateSubjectSelect(id) {
+    document.getElementById(id).innerHTML = SUBJECTS.map(s => `<option value="${s.code}">${s.name} (${s.code})</option>`).join('');
+  }
+
+  function renderAdminMarksPage() {
+    populateStudentSelect('admin-mark-student');
+    populateSubjectSelect('admin-mark-subject');
+    loadMarkFields('admin');
+    document.getElementById('admin-mark-student').onchange = () => loadMarkFields('admin');
+    document.getElementById('admin-mark-subject').onchange = () => loadMarkFields('admin');
+    renderAdminMarksOverview();
+  }
+
+  function loadMarkFields(prefix) {
+    const user = document.getElementById(`${prefix}-mark-student`).value;
+    const code = document.getElementById(`${prefix}-mark-subject`).value;
+    const m = getStudentMarks(user)[code] || { internal:0, external:0 };
+    document.getElementById(`${prefix}-mark-internal`).value = m.internal;
+    document.getElementById(`${prefix}-mark-external`).value = m.external;
+  }
+
+  function saveMarksForUser(username, code, internal, external) {
+    const all = getAllMarks();
+    if (!all[username]) all[username] = {};
+    all[username][code] = { internal: +internal, external: +external };
+    saveAllMarks(all);
+  }
+
+  function saveAdminMarks() {
+    const msg = document.getElementById('admin-mark-msg');
+    saveMarksForUser(
+      document.getElementById('admin-mark-student').value,
+      document.getElementById('admin-mark-subject').value,
+      document.getElementById('admin-mark-internal').value,
+      document.getElementById('admin-mark-external').value
+    );
+    msg.className='settings-msg ok'; msg.textContent='Marks updated.'; msg.style.display='block';
+    renderAdminMarksOverview();
+  }
+
+  function renderAdminMarksOverview() {
+    let html = `<table class="mgmt-table"><thead><tr><th>Student</th>${SUBJECTS.map(s=>`<th>${s.code}</th>`).join('')}</tr></thead><tbody>`;
+    getStudents().forEach(st => {
+      const marks = getStudentMarks(st.username);
+      html += `<tr><td><strong>${st.name}</strong><br><span style="font-size:.75rem;color:var(--muted)">${st.username}</span></td>`;
+      SUBJECTS.forEach(s => {
+        const m = marks[s.code] || { internal:0, external:0 };
+        html += `<td>${m.internal}+${m.external}</td>`;
+      });
+      html += '</tr>';
+    });
+    document.getElementById('admin-marks-overview').innerHTML = html + '</tbody></table>';
+  }
+
+  function renderAdminFines() {
+    populateStudentSelect('admin-fine-student');
+    const fines = getAllFines();
+    document.getElementById('admin-fines-body').innerHTML = fines.length ? fines.map((f,i) => {
+      const st = getUsers().find(u => u.username === f.username);
+      return `<tr><td>${st?.name||f.username}</td><td>${f.reason}</td><td>${formatINR(f.amount)}</td>
+        <td>${f.date}</td><td><button class="btn-sm btn-danger" onclick="removeFine(${i})">Remove</button></td></tr>`;
+    }).join('') : '<tr><td colspan="5" class="empty-state">No fines issued yet.</td></tr>';
+  }
+
+  function issueFine() {
+    const msg = document.getElementById('admin-fine-msg');
+    const reason = document.getElementById('admin-fine-reason').value.trim();
+    const amount = +document.getElementById('admin-fine-amount').value;
+    if (!reason || !amount || amount < 1) { msg.className='settings-msg err'; msg.textContent='Enter reason and valid amount.'; msg.style.display='block'; return; }
+    const fines = getAllFines();
+    fines.push({ username: document.getElementById('admin-fine-student').value, reason, amount, date: todayISO() });
+    saveAllFines(fines);
+    document.getElementById('admin-fine-reason').value = '';
+    document.getElementById('admin-fine-amount').value = '';
+    msg.className='settings-msg ok'; msg.textContent='Fine issued.'; msg.style.display='block';
+    renderAdminFines();
+  }
+
+  function removeFine(index) {
+    const fines = getAllFines(); fines.splice(index, 1); saveAllFines(fines); renderAdminFines();
+  }
+
+  function renderFacultyDashboard() {
+    document.getElementById('faculty-my-assigns').textContent = getAssignments().filter(a => a.profUsername === currentUser.username).length;
+    document.getElementById('faculty-student-count').textContent = getStudents().length;
+  }
+
+  function renderFacultyAssign() {
+    populateSubjectSelect('fac-assign-subject');
+    const myAssigns = getAssignments().filter(a => a.profUsername === currentUser.username);
+    document.getElementById('faculty-assign-list').innerHTML = myAssigns.length ? myAssigns.map(a => {
+      const due = new Date(a.due).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+      return `<div class="assignment-card"><div class="assignment-icon" style="background:${a.bg||'#eef3ff'}">${a.icon||'📝'}</div>
+        <div class="assignment-info"><div class="assignment-title">${a.title}</div><div class="assignment-sub">${a.subject} • Due ${due}</div></div>
+        <button class="btn-sm btn-danger" onclick="deleteAssignment(${a.id})">Remove</button></div>`;
+    }).join('') : '<div class="empty-state">No assignments posted yet.</div>';
+  }
+
+  function createAssignment() {
+    const msg = document.getElementById('fac-assign-msg');
+    const title = document.getElementById('fac-assign-title').value.trim();
+    const code = document.getElementById('fac-assign-subject').value;
+    const due = document.getElementById('fac-assign-due').value;
+    if (!title || !due) { msg.className='settings-msg err'; msg.textContent='Fill title and due date.'; msg.style.display='block'; return; }
+    const sub = SUBJECTS.find(s => s.code === code);
+    const icons = { CS401:'💻', CS402:'🗄️', CS403:'🧮', CS404:'🌐', CS405:'⚙️', CS406:'🗄️', CS407:'🌐' };
+    const assigns = getAssignments();
+    assigns.push({ id: Date.now(), title, subject: sub.name, code, icon: icons[code]||'📝', bg:'#eef3ff', status:'pending', due, profUsername: currentUser.username, profName: currentUser.name });
+    saveAssignments(assigns);
+    document.getElementById('fac-assign-title').value = '';
+    document.getElementById('fac-assign-due').value = '';
+    msg.className='settings-msg ok'; msg.textContent='Assignment posted!'; msg.style.display='block';
+    renderFacultyAssign();
+  }
+
+  function deleteAssignment(id) {
+    if (!confirm('Remove this assignment?')) return;
+    saveAssignments(getAssignments().filter(a => a.id !== id));
+    renderFacultyAssign();
+  }
+
+  function renderFacultyMarksPage() {
+    populateStudentSelect('fac-mark-student');
+    populateSubjectSelect('fac-mark-subject');
+    loadMarkFields('fac');
+    document.getElementById('fac-mark-student').onchange = () => loadMarkFields('fac');
+    document.getElementById('fac-mark-subject').onchange = () => loadMarkFields('fac');
+  }
+
+  function saveFacultyMarks() {
+    const msg = document.getElementById('fac-mark-msg');
+    saveMarksForUser(
+      document.getElementById('fac-mark-student').value,
+      document.getElementById('fac-mark-subject').value,
+      document.getElementById('fac-mark-internal').value,
+      document.getElementById('fac-mark-external').value
+    );
+    msg.className='settings-msg ok'; msg.textContent='Marks saved.'; msg.style.display='block';
+  }
+
+  function renderFacultyAttendancePage() {
+    populateSubjectSelect('fac-att-subject');
+    document.getElementById('fac-att-date').value = todayISO();
+    facultyAttState = {};
+    renderFacAttRows();
+    document.getElementById('fac-att-subject').onchange = renderFacAttRows;
+  }
+
+  function renderFacAttRows() {
+    document.getElementById('fac-att-body').innerHTML = getStudents().map(s => {
+      const status = facultyAttState[s.username] || 'present';
+      return `<tr><td>${s.username}</td><td>${s.name}</td><td><div class="att-toggle">
+        <button class="att-btn present ${status==='present'?'active':''}" onclick="setAttStatus('${s.username}','present')">Present</button>
+        <button class="att-btn absent ${status==='absent'?'active':''}" onclick="setAttStatus('${s.username}','absent')">Absent</button>
+      </div></td></tr>`;
+    }).join('');
+  }
+
+  function setAttStatus(username, status) { facultyAttState[username] = status; renderFacAttRows(); }
+
+  function saveFacultyAttendance() {
+    const msg = document.getElementById('fac-att-msg');
+    const code = document.getElementById('fac-att-subject').value;
+    const all = getAllAttendance();
+    getStudents().forEach(s => {
+      if (!all[s.username]) all[s.username] = {};
+      if (!all[s.username][code]) all[s.username][code] = { present:0, absent:0, total:0 };
+      const status = facultyAttState[s.username] || 'present';
+      all[s.username][code].total += 1;
+      if (status === 'present') all[s.username][code].present += 1;
+      else all[s.username][code].absent += 1;
+    });
+    saveAllAttendance(all);
+    msg.className='settings-msg ok'; msg.textContent='Attendance saved.'; msg.style.display='block';
+  }
+
+  function renderSettings() {
+    if (!currentUser) return;
+    setAvatarEl('settings-avatar', currentUser);
+    document.getElementById('settings-name').value = currentUser.name || '';
+    document.getElementById('settings-username').value = currentUser.username || '';
+    document.getElementById('settings-phone').value = currentUser.phone || '';
+    document.getElementById('settings-department').value = currentUser.department || '';
+    document.getElementById('settings-address').value = currentUser.address || '';
+    ['profile-msg','password-msg'].forEach(id => document.getElementById(id).style.display = 'none');
+    ['settings-current-password','settings-new-password','settings-confirm-password'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  function handleAvatarUpload(event) {
+    const file = event.target.files[0];
+    if (!file || !currentUser || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      currentUser.profilePic = e.target.result; persistCurrentUser();
+      ['settings-avatar','sidebar-avatar','topbar-avatar'].forEach(id => setAvatarEl(id, currentUser));
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeAvatar() {
+    if (!currentUser) return;
+    currentUser.profilePic = ''; persistCurrentUser();
+    ['settings-avatar','sidebar-avatar','topbar-avatar'].forEach(id => setAvatarEl(id, currentUser));
+    document.getElementById('avatar-upload').value = '';
+  }
+
+  function saveProfileDetails() {
+    const msg = document.getElementById('profile-msg');
+    const name = document.getElementById('settings-name').value.trim();
+    if (!name) { msg.className='settings-msg err'; msg.textContent='Name required.'; msg.style.display='block'; return; }
+    currentUser.name = name;
+    currentUser.phone = document.getElementById('settings-phone').value.trim();
+    currentUser.department = document.getElementById('settings-department').value.trim();
+    currentUser.address = document.getElementById('settings-address').value.trim();
+    persistCurrentUser(); renderUserChrome();
+    msg.className='settings-msg ok'; msg.textContent='Profile saved.'; msg.style.display='block';
+  }
+
+  function changePassword() {
+    const msg = document.getElementById('password-msg');
+    const current = document.getElementById('settings-current-password').value.trim();
+    const next = document.getElementById('settings-new-password').value.trim();
+    const confirm = document.getElementById('settings-confirm-password').value.trim();
+    const fail = t => { msg.textContent = t; msg.className='settings-msg err'; msg.style.display='block'; };
+    if (!current || !next || !confirm) return fail('Fill all fields.');
+    if (current !== currentUser.password) return fail('Current password incorrect.');
+    if (next.length < 6) return fail('New password must be 6+ chars.');
+    if (next !== confirm) return fail('Passwords do not match.');
+    currentUser.password = next; persistCurrentUser();
+    ['settings-current-password','settings-new-password','settings-confirm-password'].forEach(id => document.getElementById(id).value = '');
+    msg.className='settings-msg ok'; msg.textContent='Password updated.'; msg.style.display='block';
+  }
+</script>
+</body>
+</html>

@@ -1571,7 +1571,7 @@
 
   async function refreshUsersCache() {
     try {
-      const res = await fetch('http://localhost:5000/api/users', { headers: { 'Accept': 'application/json' } });
+      const res = await fetch('https://edunest-appliation.onrender.com/api/users', { headers: { 'Accept': 'application/json' } });
       if (!res.ok) throw new Error('Users API returned ' + res.status);
       const data = await res.json();
       USERS_CACHE = Array.isArray(data) ? data : [];
@@ -1681,7 +1681,7 @@
     // Create account on server, then keep local profile for role/metadata
     (async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/auth/register', {
+        const res = await fetch('https://edunest-appliation.onrender.com/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email: username, password, role: currentRegRole })
@@ -1742,7 +1742,7 @@
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch('https://edunest-appliation.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ email: u, password: p })
@@ -1865,7 +1865,7 @@
           feePaid: currentUser.feePaid,
           active: currentUser.active,
         };
-        await fetch('http://localhost:5000/api/users/' + currentUser.id, {
+        await fetch('https://edunest-appliation.onrender.com/api/users/' + currentUser.id, {
           method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates)
         });
         await refreshUsersCache();
@@ -2122,7 +2122,7 @@
         const u = getUsers().find(x => x.username === username);
         if (!u || !u._id && !u.id) return;
         const id = u._id || u.id;
-        await fetch('http://localhost:5000/api/users/' + id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: false }) });
+        await fetch('https://edunest-appliation.onrender.com/api/users/' + id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: false }) });
         await refreshUsersCache();
         renderAdminTeachers();
       } catch (e) { console.error(e); }
@@ -2135,7 +2135,7 @@
         const u = getUsers().find(x => x.username === username);
         if (!u || !u._id && !u.id) return;
         const id = u._id || u.id;
-        await fetch('http://localhost:5000/api/users/' + id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: true }) });
+        await fetch('https://edunest-appliation.onrender.com/api/users/' + id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: true }) });
         await refreshUsersCache();
         renderAdminTeachers();
       } catch (e) { console.error(e); }
